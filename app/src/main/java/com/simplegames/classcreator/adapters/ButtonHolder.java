@@ -6,7 +6,7 @@ import android.view.View;
 
 public class ButtonHolder extends RecyclerView.ViewHolder {
 
-    public ButtonHolder(@NonNull View itemView) {
+    ButtonHolder(@NonNull View itemView) {
         super(itemView);
     }
 }

@@ -1,9 +1,11 @@
 package com.simplegames.classcreator.adapters;
 
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.simplegames.classcreator.DataBase.DBContract;
+import com.simplegames.classcreator.DataBase.DBHelper;
 import com.simplegames.classcreator.R;
 
 import java.util.ArrayList;
@@ -22,10 +27,12 @@ public class MainAdapter extends RecyclerView.Adapter {
     private Context context;
     public enum Type {METHOD, PARAM}
     private Type type;
+    private String id;
 
-    public MainAdapter(ArrayList<String> itemList, Context context, Type type) {
+    public MainAdapter(ArrayList<String> itemList, Context context, Type type, String id) {
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.type = type;
+        this.id = id;
         this.context = context;
         this.itemList = itemList;
     }
@@ -100,8 +107,10 @@ public class MainAdapter extends RecyclerView.Adapter {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     if (!(editClassName.getText().toString().isEmpty())){
-                                        itemList.add(0, c[0] + " " + editClassName.getText().toString());
-                                        notifyItemInserted(0);
+                                        itemList.add(itemList.size(), c[0] + " " + editClassName.getText().toString());
+                                        notifyItemInserted(itemList.size());
+
+                                        updateDB();
                                     }
                                 }
                             })
@@ -140,5 +149,30 @@ public class MainAdapter extends RecyclerView.Adapter {
     public void removeItem(int position){
         itemList.remove(position);
         notifyItemRemoved(position);
+        updateDB();
+    }
+
+    private void updateDB(){
+        ContentValues values = new ContentValues();
+        switch (type){
+            case PARAM:
+                values.put(DBContract.Entry.CLASS_PARAMS ,all());
+                break;
+            case METHOD:
+                values.put(DBContract.Entry.CLASS_METHODS ,all());
+                break;
+        }
+
+        new DBHelper(context).getWritable().update(DBContract.Entry.TABLE_NAME, values, "_ID LIKE ?", new String[]{id});
+    }
+
+    private String all(){
+        String result = "";
+
+        for (int i = 0; i < itemList.size(); i++){
+            result += itemList.get(i) + "::";
+        }
+
+        return result;
     }
 }

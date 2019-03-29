@@ -1,6 +1,7 @@
 package com.simplegames.classcreator.Utils;
 
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
@@ -9,7 +10,7 @@ import com.simplegames.classcreator.adapters.MainAdapter;
 
 public class SwipeToDelete extends ItemTouchHelper {
 
-    public SwipeToDelete(final MainAdapter adapter, RecyclerView recyclerView) {
+    public SwipeToDelete(final MainAdapter adapter, final RecyclerView recyclerView) {
         super(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT){
 
             @Override
@@ -25,6 +26,9 @@ public class SwipeToDelete extends ItemTouchHelper {
                 int position = viewHolder.getAdapterPosition();
 
                 adapter.removeItem(position);
+
+                Snackbar.make(recyclerView, "Элемент удален", Snackbar.LENGTH_SHORT)
+                        .setAction("Action", null).show();
             }
 
             @Override
