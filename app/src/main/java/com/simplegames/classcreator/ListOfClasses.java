@@ -16,8 +16,6 @@ import android.widget.EditText;
 
 import com.simplegames.classcreator.DataBase.DBContract;
 import com.simplegames.classcreator.DataBase.DBHelper;
-import com.simplegames.classcreator.Utils.SwipeToDelete;
-import com.simplegames.classcreator.adapters.ButtonHolder;
 import com.simplegames.classcreator.adapters.ListOfClassesAdapter;
 
 public class ListOfClasses extends AppCompatActivity {
