@@ -9,10 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.simplegames.classcreator.DataBase.DBContract;
 import com.simplegames.classcreator.DataBase.DBHelper;
@@ -23,7 +25,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView className;
     private ArrayList<String> paramsList = new ArrayList<>();
     private ArrayList<String> methodsList = new ArrayList<>();
     private MainViewModel viewModel;
@@ -47,16 +48,6 @@ public class MainActivity extends AppCompatActivity {
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 
-        className = findViewById(R.id.className);
-        Button editClassName = findViewById(R.id.editClassName);
-
-        editClassName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               createEditClassNameDialog();
-            }
-        });
-
         createAdapters();
     }
 
@@ -73,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
             loadDataFromDB();
             paramsAdapter = new MainAdapter(paramsList, MainActivity.this, MainAdapter.Type.PARAM, id);
             methodsAdapter = new MainAdapter(methodsList, MainActivity.this, MainAdapter.Type.METHOD, id);
+            viewModel.ClassName = getTitle().toString();
 
             viewModel.setAdapters(paramsAdapter, methodsAdapter);
         }
@@ -82,6 +74,23 @@ public class MainActivity extends AppCompatActivity {
 
         new SwipeToDelete(paramsAdapter, paramsRecycler);
         new SwipeToDelete(methodsAdapter, methodsRecycler);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.edit:
+                createEditClassNameDialog();
+                break;
+        }
+        return true;
     }
 
     private void createEditClassNameDialog(){
@@ -102,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                         values.put(DBContract.Entry.CLASS_NAME, editClassName.getText().toString());
 
                         viewModel.ClassName = editClassName.getText().toString();
-                        className.setText(editClassName.getText().toString());
+                        setTitle(editClassName.getText().toString());
 
                         dbHelper.getWritable().update(DBContract.Entry.TABLE_NAME, values, "_ID LIKE ?", new String[]{id});
                     }
@@ -116,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
     private void loadFromViewModel(){
         paramsAdapter = viewModel.getParamsAdapter(MainActivity.this);
         methodsAdapter = viewModel.getMethodsAdapter(MainActivity.this);
-        className.setText(viewModel.ClassName);
+        setTitle(viewModel.ClassName);
     }
 
     private void loadDataFromDB(){
@@ -131,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
             int params = cursor.getColumnIndex(DBContract.Entry.CLASS_PARAMS);
 
             do {
-                className.setText(cursor.getString(name));
+                setTitle(cursor.getString(name));
 
                 if (cursor.getString(methods) != null){
                     parse(methodsList, cursor.getString(methods));
@@ -145,7 +154,6 @@ public class MainActivity extends AppCompatActivity {
 
         cursor.close();
     }
-
 
     private void parse(ArrayList<String> list, String str){
         list.clear();
