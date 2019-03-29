@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+<LinearLayout android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.constraint.ConstraintLayout
         android:background="@color/colorPrimary"
@@ -44,7 +44,7 @@
     </android.support.constraint.ConstraintLayout>
 
     <LinearLayout
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -63,8 +63,8 @@
 
         <View
             android:background="@android:color/darker_gray"
-            android:layout_width="match_parent"
-            android:layout_height="1dp">
+            android:layout_width="1dp"
+            android:layout_height="match_parent">
         </View>
 
         <LinearLayout

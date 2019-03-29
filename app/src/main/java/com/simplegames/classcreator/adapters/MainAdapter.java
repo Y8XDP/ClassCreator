@@ -20,16 +20,18 @@ public class MainAdapter extends RecyclerView.Adapter {
     private ArrayList<String> itemList;
     private LayoutInflater inflater;
     private Context context;
-
     public enum Type {METHOD, PARAM}
     private Type type;
-
 
     public MainAdapter(ArrayList<String> itemList, Context context, Type type) {
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.type = type;
         this.context = context;
         this.itemList = itemList;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
     }
 
     @NonNull
@@ -133,5 +135,10 @@ public class MainAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         return itemList.size() + 1;
+    }
+
+    public void removeItem(int position){
+        itemList.remove(position);
+        notifyItemRemoved(position);
     }
 }
