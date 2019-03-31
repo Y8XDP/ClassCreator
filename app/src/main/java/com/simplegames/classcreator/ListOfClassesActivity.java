@@ -18,7 +18,7 @@ import com.simplegames.classcreator.DataBase.DBContract;
 import com.simplegames.classcreator.DataBase.DBHelper;
 import com.simplegames.classcreator.adapters.ListOfClassesAdapter;
 
-public class ListOfClasses extends AppCompatActivity {
+public class ListOfClassesActivity extends AppCompatActivity {
 
     private ListOfClassesAdapter adapter;
 
@@ -35,7 +35,7 @@ public class ListOfClasses extends AppCompatActivity {
         LinearLayoutManager manager = new LinearLayoutManager(getApplicationContext());
         listOfClasses.setLayoutManager(manager);
 
-        adapter = new ListOfClassesAdapter(ListOfClasses.this);
+        adapter = new ListOfClassesAdapter(ListOfClassesActivity.this);
         listOfClasses.setAdapter(adapter);
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT){
@@ -72,7 +72,7 @@ public class ListOfClasses extends AppCompatActivity {
 
     private void createInsertDialog(){
         AlertDialog dialog;
-        AlertDialog.Builder builder = new AlertDialog.Builder(ListOfClasses.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(ListOfClassesActivity.this);
 
         View view = getLayoutInflater().inflate(R.layout.class_name_dialog, null);
 

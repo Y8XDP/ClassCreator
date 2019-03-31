@@ -27,6 +27,7 @@ public class MainAdapter extends RecyclerView.Adapter {
     public enum Type {METHOD, PARAM}
     private Type type;
     private String id;
+    private String removedItem;
 
     public MainAdapter(ArrayList<String> itemList, Context context, Type type, String id) {
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -146,12 +147,20 @@ public class MainAdapter extends RecyclerView.Adapter {
     }
 
     public void removeItem(int position){
+        removedItem = itemList.get(position);
         itemList.remove(position);
         notifyItemRemoved(position);
-        updateDB();
+        //updateDB();
     }
 
-    private void updateDB(){
+    public void undoRemoveItem(int position){
+        itemList.add(position, removedItem);
+        removedItem = null;
+        notifyItemInserted(position);
+        //updateDB();
+    }
+
+    public void updateDB(){
         ContentValues values = new ContentValues();
         switch (type){
             case PARAM:

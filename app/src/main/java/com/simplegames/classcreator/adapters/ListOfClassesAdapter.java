@@ -12,14 +12,16 @@ import android.widget.TextView;
 
 import com.simplegames.classcreator.DataBase.DBContract;
 import com.simplegames.classcreator.DataBase.DBHelper;
+import com.simplegames.classcreator.Item;
 import com.simplegames.classcreator.MainActivity;
+import com.simplegames.classcreator.R;
 
 import java.util.ArrayList;
 
 public class ListOfClassesAdapter extends RecyclerView.Adapter {
 
     private LayoutInflater inflater;
-    private ArrayList<String[]> data = new ArrayList<>();
+    private ArrayList<Item> data = new ArrayList<>();
     private DBHelper helper;
     private Context context;
 
@@ -33,7 +35,7 @@ public class ListOfClassesAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View rootView = inflater.inflate(android.R.layout.simple_list_item_1, viewGroup, false);
+        View rootView = inflater.inflate(R.layout.item_class_file, viewGroup, false);
         return new TextHolder(rootView);
     }
 
@@ -43,14 +45,14 @@ public class ListOfClassesAdapter extends RecyclerView.Adapter {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, MainActivity.class);
-                intent.putExtra("ID", data.get(i)[1]);
+                intent.putExtra("ID", data.get(i).getID());
 
                 context.startActivity(intent);
             }
         });
 
-        TextView text = viewHolder.itemView.findViewById(android.R.id.text1);
-        text.setText(data.get(i)[0]);
+        TextView text = viewHolder.itemView.findViewById(R.id.text1);
+        text.setText(data.get(i).getClassName());
     }
 
     @Override
@@ -67,10 +69,8 @@ public class ListOfClassesAdapter extends RecyclerView.Adapter {
             int id = cursor.getColumnIndex(DBContract.Entry._ID);
 
             do {
-                String[] dataTemp = new String[2];
-                dataTemp[0] = cursor.getString(name);
-                dataTemp[1] = cursor.getString(id);
-                data.add(dataTemp);
+                Item item = new Item(cursor.getString(id), cursor.getString(name));
+                data.add(item);
             }while(cursor.moveToNext());
         }
 
@@ -84,7 +84,7 @@ public class ListOfClassesAdapter extends RecyclerView.Adapter {
     }
 
     public void removeItem(int position){
-        new DBHelper(context).getWritable().delete(DBContract.Entry.TABLE_NAME, " _ID LIKE ?", new String[]{data.get(position)[1]});
+        helper.getWritable().delete(DBContract.Entry.TABLE_NAME, " _ID LIKE ?", new String[]{data.get(position).getID()});
         data.remove(position);
 
         notifyItemRemoved(position);

@@ -13,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 
 import com.simplegames.classcreator.DataBase.DBContract;
@@ -31,8 +30,9 @@ public class MainActivity extends AppCompatActivity {
     private MainAdapter paramsAdapter;
     private MainAdapter methodsAdapter;
     private DBHelper dbHelper;
-
     private String id;
+
+    private ArrayList<String> idsToDelete = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +72,8 @@ public class MainActivity extends AppCompatActivity {
         paramsRecycler.setAdapter(paramsAdapter);
         methodsRecycler.setAdapter(methodsAdapter);
 
-        new SwipeToDelete(paramsAdapter, paramsRecycler);
-        new SwipeToDelete(methodsAdapter, methodsRecycler);
+        new SwipeToDelete(paramsAdapter, paramsRecycler, idsToDelete);
+        new SwipeToDelete(methodsAdapter, methodsRecycler, idsToDelete);
     }
 
     @Override
@@ -131,8 +131,8 @@ public class MainActivity extends AppCompatActivity {
     private void loadDataFromDB(){
         Cursor cursor = dbHelper.getReadable().rawQuery("SELECT * FROM " +
                         DBContract.Entry.TABLE_NAME + " WHERE " +
-                        DBContract.Entry._ID + " LIKE " + id,
-                new String[]{});
+                        DBContract.Entry._ID + " = ?",
+                new String[]{id});
 
         if (cursor.moveToFirst()){
             int name = cursor.getColumnIndex(DBContract.Entry.CLASS_NAME);
