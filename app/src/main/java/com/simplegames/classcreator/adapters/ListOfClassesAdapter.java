@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +53,13 @@ public class ListOfClassesAdapter extends RecyclerView.Adapter {
         });
 
         TextView text = viewHolder.itemView.findViewById(R.id.text1);
-        text.setText(data.get(i).getClassName());
+        String txt = data.get(i).getClassName();
+
+        if (!data.get(i).getClassExtend().isEmpty()){
+            txt += "<font color='#FF7837'> extends </font>" + data.get(i).getClassExtend();
+        }
+
+        text.setText(Html.fromHtml(txt));
     }
 
     @Override
@@ -66,10 +73,11 @@ public class ListOfClassesAdapter extends RecyclerView.Adapter {
 
         if (cursor.moveToFirst()){
             int name = cursor.getColumnIndex(DBContract.Entry.CLASS_NAME);
+            int ex = cursor.getColumnIndex(DBContract.Entry.CLASS_EXTENDS);
             int id = cursor.getColumnIndex(DBContract.Entry._ID);
 
             do {
-                Item item = new Item(cursor.getString(id), cursor.getString(name));
+                Item item = new Item(cursor.getString(id), cursor.getString(name), cursor.getString(ex));
                 data.add(item);
             }while(cursor.moveToNext());
         }

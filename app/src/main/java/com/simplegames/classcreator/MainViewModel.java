@@ -12,6 +12,7 @@ class MainViewModel extends ViewModel {
     private MainAdapter paramsAdapter;
     private MainAdapter methodsAdapter;
     String ClassName = "";
+    String extend = "";
 
     MainAdapter getParamsAdapter(Context context) {
         paramsAdapter.setContext(context);

@@ -4,6 +4,31 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="24dp"
+        android:text="Наследовать от: "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/extend"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:textSize="17sp"
+        android:textStyle="bold"
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="24dp"
+        android:textColor="@android:color/black"
+        android:text="Введите новое имя класс"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <EditText
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
